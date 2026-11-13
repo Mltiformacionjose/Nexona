@@ -1,0 +1,239 @@
+////////////////////////////////////////////////////////////
+// NEXORA - NEX-DOC-005 v0.3 PROVISIONAL (revision tecnica)
+// Modelo logico para dbdiagram.io / PostgreSQL
+// Mantiene las 9 entidades del modelo recibido.
+// Las reglas marcadas como trigger/SQL adicional se implementan
+// en nexora_modelo_postgresql.sql.
+// Los indices UNIQUE parciales y triggers se documentan aqui, pero solo
+// se implementan en el SQL porque DBML no representa sus predicados.
+////////////////////////////////////////////////////////////
+
+Project nexora {
+  database_type: 'PostgreSQL'
+  Note: 'NEX-DOC-005 v0.3 provisional. Modelo relacional revisado; confirmar reglas de negocio contra NEX-DOC-004 v0.2 y ejecutar pruebas PostgreSQL antes de aprobar.'
+}
+
+Table users {
+  id integer [primary key, increment]
+  username varchar(50) [not null]
+  email varchar(255) [not null]
+  password_hash varchar(255) [not null]
+  notifications_enabled boolean [not null, default: true]
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+
+  indexes {
+    (`lower(username)`) [unique, name: 'uq_users_username_lower']
+    (`lower(email)`) [unique, name: 'uq_users_email_lower']
+  }
+}
+
+Table task_lists {
+  id integer [primary key, increment]
+  name varchar(150) [not null]
+  description varchar(500)
+  list_type varchar(20) [not null, note: 'Valores permitidos: personal, shared']
+  owner_id integer [not null]
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+
+  indexes {
+    owner_id [name: 'ix_task_lists_owner_id']
+    list_type [name: 'ix_task_lists_type']
+    (id, owner_id) [unique, name: 'uq_task_lists_id_owner']
+  }
+
+  checks {
+    `list_type IN ('personal', 'shared')` [name: 'ck_task_lists_type']
+  }
+}
+
+Table list_memberships {
+  user_id integer [not null]
+  list_id integer [not null]
+  joined_at timestamptz [not null, default: `now()`]
+
+  indexes {
+    (user_id, list_id) [pk, name: 'pk_list_memberships']
+    list_id [name: 'ix_list_memberships_list_id']
+  }
+}
+
+Table tasks {
+  id integer [primary key, increment]
+  list_id integer [not null]
+  title varchar(150) [not null]
+  description text
+  due_date date
+  status varchar(20) [not null, default: 'todo']
+  creator_id integer [not null]
+  completed_at timestamptz
+  created_at timestamptz [not null, default: `now()`]
+  updated_at timestamptz [not null, default: `now()`]
+
+  indexes {
+    list_id [name: 'ix_tasks_list_id']
+    (list_id, status) [name: 'ix_tasks_list_status']
+    due_date [name: 'ix_tasks_due_date']
+    creator_id [name: 'ix_tasks_creator_id']
+    (id, list_id) [unique, name: 'uq_tasks_id_list']
+  }
+
+  checks {
+    `status IN ('todo', 'in_progress', 'done')` [name: 'ck_tasks_status']
+    `((status = 'done' AND completed_at IS NOT NULL) OR (status <> 'done' AND completed_at IS NULL))` [name: 'ck_tasks_completed_at']
+  }
+}
+
+Table task_assignees {
+  task_id integer [not null]
+  list_id integer [not null, note: 'Repetido intencionadamente para garantizar que el usuario asignado pertenece a la misma lista de la tarea']
+  user_id integer [not null]
+  assigned_at timestamptz [not null, default: `now()`]
+
+  indexes {
+    (task_id, user_id) [pk, name: 'pk_task_assignees']
+    user_id [name: 'ix_task_assignees_user_id']
+    list_id [name: 'ix_task_assignees_list_id']
+  }
+}
+
+// El SQL protege el historial: no permite INSERT directo, UPDATE, DELETE directo ni TRUNCATE.
+// El borrado en cascada al eliminar una tarea sigue permitido.
+Table task_status_changes {
+  id integer [primary key, increment]
+  task_id integer [not null]
+  old_status varchar(20)
+  new_status varchar(20) [not null]
+  changed_by integer [not null]
+  changed_at timestamptz [not null, default: `now()`]
+
+  indexes {
+    (task_id, changed_at) [name: 'ix_task_status_changes_task_date']
+    changed_by [name: 'ix_task_status_changes_user']
+  }
+
+  checks {
+    `old_status IS NULL OR old_status IN ('todo', 'in_progress', 'done')` [name: 'ck_task_status_changes_old']
+    `new_status IN ('todo', 'in_progress', 'done')` [name: 'ck_task_status_changes_new']
+  }
+}
+
+// El SQL impide insertar invitaciones directamente en estado final:
+// toda invitacion debe nacer pending y responderse mediante UPDATE.
+Table invitations {
+  id integer [primary key, increment]
+  list_id integer [not null]
+  invited_user_id integer [not null]
+  inviter_user_id integer [not null, note: 'Debe coincidir con task_lists.owner_id']
+  status varchar(20) [not null, default: 'pending']
+  created_at timestamptz [not null, default: `now()`]
+  responded_at timestamptz
+
+  indexes {
+    list_id [name: 'ix_invitations_list_id']
+    (list_id, status) [name: 'ix_invitations_list_status']
+    (invited_user_id, status) [name: 'ix_invitations_user_status']
+    inviter_user_id [name: 'ix_invitations_inviter']
+    (id, list_id) [unique, name: 'uq_invitations_id_list']
+  }
+
+  checks {
+    `status IN ('pending', 'accepted', 'rejected', 'cancelled')` [name: 'ck_invitations_status']
+    `((status = 'pending' AND responded_at IS NULL) OR (status <> 'pending' AND responded_at IS NOT NULL))` [name: 'ck_invitations_responded_at']
+  }
+}
+
+Table notifications {
+  id integer [primary key, increment]
+  recipient_user_id integer [not null]
+  notification_type varchar(30) [not null]
+  task_id integer
+  list_id integer [not null, note: 'Lista relacionada; permite validar que tarea/invitacion y lista coinciden']
+  invitation_id integer
+  created_at timestamptz [not null, default: `now()`]
+  read_at timestamptz
+
+  indexes {
+    recipient_user_id [name: 'ix_notifications_recipient']
+    (recipient_user_id, read_at, created_at) [name: 'ix_notifications_user_read_date']
+    task_id [name: 'ix_notifications_task']
+    list_id [name: 'ix_notifications_list']
+    invitation_id [name: 'ix_notifications_invitation']
+  }
+
+  checks {
+    `notification_type IN ('task_assigned', 'task_overdue', 'invitation_received')` [name: 'ck_notifications_type']
+    `((notification_type IN ('task_assigned', 'task_overdue') AND task_id IS NOT NULL AND invitation_id IS NULL) OR (notification_type = 'invitation_received' AND invitation_id IS NOT NULL AND task_id IS NULL))` [name: 'ck_notifications_related_entity']
+  }
+}
+
+Table password_resets {
+  id integer [primary key, increment]
+  user_id integer [not null]
+  token_hash varchar(255) [not null, unique]
+  created_at timestamptz [not null, default: `now()`]
+  expires_at timestamptz [not null]
+  used_at timestamptz
+  invalidated_at timestamptz [note: 'Invalida solicitudes anteriores sin confundirlas con tokens utilizados']
+
+  indexes {
+    user_id [name: 'ix_password_resets_user_id']
+  }
+
+  checks {
+    `expires_at > created_at` [name: 'ck_password_resets_expiration']
+    `(used_at IS NULL OR invalidated_at IS NULL)` [name: 'ck_password_resets_terminal_state']
+  }
+}
+
+// Relaciones
+Ref: task_lists.owner_id > users.id [delete: restrict]
+Ref: list_memberships.user_id > users.id [delete: cascade]
+Ref: list_memberships.list_id > task_lists.id [delete: cascade]
+Ref: tasks.list_id > task_lists.id [delete: cascade]
+Ref: tasks.creator_id > users.id [delete: restrict]
+
+// Las dos referencias compuestas hacen que la tarea y el responsable
+// pertenezcan obligatoriamente a la misma lista.
+Ref: task_assignees.(task_id, list_id) > tasks.(id, list_id) [delete: cascade]
+Ref: task_assignees.(user_id, list_id) > list_memberships.(user_id, list_id) [delete: cascade]
+
+Ref: task_status_changes.task_id > tasks.id [delete: cascade]
+Ref: task_status_changes.changed_by > users.id [delete: restrict]
+Ref: invitations.list_id > task_lists.id [delete: cascade]
+Ref: invitations.invited_user_id > users.id [delete: restrict]
+// El invitador debe ser el propietario de esa lista.
+Ref: invitations.(list_id, inviter_user_id) > task_lists.(id, owner_id) [delete: cascade]
+Ref: notifications.recipient_user_id > users.id [delete: cascade]
+Ref: notifications.list_id > task_lists.id [delete: cascade]
+Ref: notifications.(task_id, list_id) > tasks.(id, list_id) [delete: cascade]
+Ref: notifications.(invitation_id, list_id) > invitations.(id, list_id) [delete: cascade]
+Ref: password_resets.user_id > users.id [delete: cascade]
+
+// Indices UNIQUE parciales implementados solo en SQL:
+// - invitations(list_id, invited_user_id) WHERE status = 'pending'.
+// - notifications(recipient_user_id, task_id) WHERE notification_type = 'task_overdue'.
+// - password_resets(user_id) WHERE used_at IS NULL AND invalidated_at IS NULL.
+//
+// Validaciones adicionales implementadas en SQL:
+// - El propietario debe figurar en list_memberships.
+// - Una lista personal solo admite a su propietario.
+// - Solo las listas compartidas admiten invitaciones/asignaciones.
+// - Una invitacion pendiente por lista y usuario.
+// - Aceptar invitacion crea membresia dentro de la misma transaccion.
+// - Una notificacion task_overdue por usuario y tarea.
+// - Una solicitud de recuperacion activa por usuario.
+// - El historial de estados se registra automaticamente y se protege contra
+//   INSERT directo, UPDATE, DELETE directo y TRUNCATE, permitiendo el borrado en cascada.
+// - Bloqueo FOR UPDATE de task_lists al validar asignaciones, para serializar
+//   la asignacion frente al cambio de tipo de lista.
+//
+// Validaciones de FastAPI + transaccion (no triggers):
+// - Consumo de password_reset con bloqueo ordenado users -> password_resets,
+//   SELECT FOR UPDATE y actualizacion atomica de used_at y users.password_hash.
+// - task_assigned: el destinatario debe figurar en task_assignees.
+// - invitation_received: el destinatario debe coincidir con invited_user_id.
+// - task_overdue: la tarea debe seguir vencida y no estar completada; comprobar
+//   con la fecha local Europe/Madrid y bloquear la tarea durante la insercion.
+// - Permisos de usuario, preferencia notifications_enabled y no autoavisos.
