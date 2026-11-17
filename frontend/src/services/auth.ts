@@ -21,6 +21,15 @@ export function logout(): Promise<void> {
   return request<void>("/auth/logout", { method: "POST" });
 }
 
+/**
+ * POST /auth/password-reset/request — RF-03.
+ * Responde igual exista o no la cuenta (no revela qué correos están registrados).
+ */
+export function requestPasswordReset(email: string): Promise<void> {
+  if (API_MODE === "mock") return mockDb.requestPasswordReset(email);
+  return request<void>("/auth/password-reset/request", { method: "POST", body: { email } });
+}
+
 /** GET /me — usuario de la sesión actual (401 si no hay sesión). */
 export function getCurrentUser(): Promise<User> {
   if (API_MODE === "mock") return mockDb.me();

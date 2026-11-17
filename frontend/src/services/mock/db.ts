@@ -130,6 +130,12 @@ export const mockDb = {
     save();
   },
 
+  /** No envía correo: en modo simulado solo confirma la petición. */
+  async requestPasswordReset(email: string): Promise<void> {
+    void email;
+    await delay();
+  },
+
   async me(): Promise<User> {
     await delay();
     return publicUser(requireSession(load()));
