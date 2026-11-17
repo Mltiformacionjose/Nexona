@@ -1,91 +1,83 @@
-# Nexora
+# Nexora — Frontend
 
-Aplicación web de gestión de tareas personales y colaborativas. El repositorio
-contiene un frontend y un backend independientes, de acuerdo con
-**NEX-DOC-006 — Arquitectura técnica de la aplicación (v0.2)**.
+Nexora es una aplicación web de gestión de tareas y listas personales y compartidas: permite crear y organizar tareas, compartir listas con otras personas, recibir avisos y ver un resumen del trabajo. Este repositorio contiene el **frontend**, la interfaz de usuario. El backend vive en otro repositorio.
 
-## Estado
+> **Estado real (2026-11-17):** desarrollo en marcha, pieza a pieza y con un commit por pieza. Hecho: fundación visual del diseño aprobado, componentes base, capa de servicios hacia la API y las pantallas **inicio de sesión (WF-007), registro (WF-008), recuperar contraseña (WF-009) y nueva tarea (WF-004)**, dentro del marco con barra lateral. Como el backend aún no tiene endpoints, funcionan en **modo simulado**: los datos viven en el navegador y no se guarda nada en una base de datos. La página `/` sigue siendo un muestrario temporal.
 
-Fase de preparación técnica. El proyecto está estructurado y con las
-dependencias base instaladas, pero **todavía no contiene funcionalidades ni
-lógica de negocio**: no hay modelos, migraciones, endpoints, servicios ni
-pantallas implementadas.
+## Probar las pantallas (modo simulado)
 
-## Estructura
+1. `npm run dev` y abre `http://localhost:3000/register` o `/login`.
+2. Cuenta de demostración: **demo@nexora.app** / **nexora-demo-1234**.
+3. Nueva tarea: `/lists/1/tasks/new` (lista compartida, con responsables) o `/lists/2/tasks/new` (lista personal, sin responsables). Una cuenta recién registrada no es miembro de esas listas y verá el mensaje de lista no accesible, como haría el backend.
 
-```
-Nexona-1/
-├── backend/                 # FastAPI + SQLAlchemy + Alembic + PostgreSQL
-│   ├── app/
-│   │   ├── core/            # configuración, seguridad y errores
-│   │   ├── db/              # base declarativa y sesiones
-│   │   ├── models/          # modelos ORM (pendiente)
-│   │   ├── schemas/         # esquemas Pydantic (pendiente)
-│   │   ├── routers/         # endpoints /api/v1 (pendiente)
-│   │   ├── services/        # lógica de negocio (pendiente)
-│   │   └── dependencies/    # dependencias de FastAPI (pendiente)
-│   ├── alembic/             # migraciones
-│   ├── tests/
-│   └── requirements.txt
-└── frontend/                # Next.js App Router + React + TypeScript + Tailwind
-    ├── src/
-    │   ├── app/             # rutas y layouts
-    │   ├── components/      # ui y layout
-    │   ├── features/        # auth, lists, tasks, invitations, notifications, dashboard
-    │   ├── hooks/
-    │   ├── services/
-    │   ├── lib/
-    │   └── types/
-    └── public/
-```
+Los datos simulados se borran al cerrar la pestaña. Cuando el backend tenga endpoints, pon `NEXT_PUBLIC_API_MODE=http` en `.env.local`. Las pantallas no cambian y `npm run smoke:api` comprueba la API real (TESTING_FRONTEND, `Nexora-Documentation/10-frontend/TESTING_FRONTEND.md`).
 
-## Requisitos
+## Responsabilidad del frontend
 
-- Python 3.14 o compatible con las versiones fijadas en `backend/requirements.txt`.
-- Node.js 24 y npm 11 (gestionados con `package-lock.json`).
-- PostgreSQL 14 o superior (solo para desarrollo futuro; esta fase no conecta
-  con ninguna base de datos).
+Mostrar la interfaz, recoger acciones del usuario y comunicarse con la API del backend. **No accede a PostgreSQL**, no aplica reglas de negocio ni sustituye la autorización del backend. Ver ARCHITECTURE_FRONTEND (`Nexora-Documentation/10-frontend/ARCHITECTURE_FRONTEND.md`).
 
-## Backend
+## Tecnologías
+
+Next.js 16.4.6 (App Router), React 19.3.0, TypeScript 5 (estricto), Tailwind CSS 4.3.3, ESLint 9.
+
+> **Importante:** esta versión de Next.js tiene cambios incompatibles con versiones anteriores. Consulta la documentación incluida en `node_modules/next/dist/docs/` antes de escribir código (ver `AGENTS.md`).
+
+## Requisitos previos
+
+- Node.js con npm (el proyecto se ha usado con Node 24; la versión mínima no está documentada).
+- Opcional para trabajar con datos reales: el backend de Nexora en ejecución (aún no hay endpoints).
+
+## Instalación (PowerShell, desde esta carpeta)
 
 ```powershell
-cd backend
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-Copy-Item .env.example .env   # completar DATABASE_URL con datos locales
+npm ci
 ```
 
-Comprobaciones:
+## Variables de entorno
+
+Copia `.env.example` a `.env.local` y ajusta el valor. `.env.local` está ignorado por Git.
+
+| Variable | Descripción |
+|---|---|
+| `NEXT_PUBLIC_API_MODE` | `mock` (por defecto, datos simulados) o `http` (API real). |
+| `NEXT_PUBLIC_API_URL` | URL base de la API del backend (ejemplo: `http://localhost:8000/api/v1`). Solo se usa en modo `http`. Es **pública**: no pongas secretos. |
+
+## Ejecución local
 
 ```powershell
-pytest
-```
-
-La aplicación FastAPI se importa desde `backend/app/main.py`. Los routers se
-registrarán bajo el prefijo `/api/v1`.
-
-## Frontend
-
-```powershell
-cd frontend
-npm install
-Copy-Item .env.example .env.local
 npm run dev
 ```
 
-Comprobación de tipos (Next 16 genera los tipos de rutas en `.next/types`):
+Abre `http://localhost:3000`. Rutas disponibles: `/login`, `/register`, `/forgot-password`, `/lists/[listId]/tasks/new` y `/` (muestrario temporal).
+
+## Comandos de comprobación y build
 
 ```powershell
-npx next typegen
-npx tsc --noEmit
+npm run lint        # ESLint
+npm run typecheck   # TypeScript
+npm run build       # compilación de producción
+npm run start       # sirve la compilación
+npm run smoke:api   # escenarios contra la API real (requiere backend)
 ```
+
+A 2026-11-17 pasan lint, tipos y build. No hay pruebas automáticas de interfaz todavía (TESTING_FRONTEND, `Nexora-Documentation/10-frontend/TESTING_FRONTEND.md`).
+
+## Estructura del proyecto
+
+```
+src/app/(public)/   login, register, forgot-password (sin sesión)
+src/app/(private)/  marco con barra lateral; lists/[listId]/tasks/new
+src/components/     ui/ (primitivos) y layout/ (barra lateral, encabezado)
+src/features/       auth/ y tasks/ (formularios y pantallas); el resto vacías
+src/services/       llamadas a la API y modo simulado (mock/)
+src/lib/ types/     utilidades, validaciones y tipos de la API
+scripts/            api-smoke.mjs
+```
+
+## Comunicación con el backend
+
+Todas las llamadas pasan por `src/services/` (JSON, sesión por cookie `HttpOnly`, `credentials: "include"`). **El contrato HTTP está en estado de propuesta** y no hay endpoints implementados: ver el contrato de API del backend (`Nexora-Documentation/11-backend/API_CONTRACT.md`). Si el backend usa otro dominio, tendrá que permitir CORS con credenciales para el origen del frontend (AT-04, Pendiente).
 
 ## Documentación
 
-Este repositorio no contiene documentación (petición de la profesora). Toda la documentación del proyecto está en la carpeta independiente **Nexora-Documentation**: requisitos, flujos, dominio, diseño, decisiones y la documentación técnica de frontend (`10-frontend/`) y backend (`11-backend/`). El `.gitignore` excluye `docs/` y `documentation/`.
-
-## Decisiones pendientes
-
-Las decisiones técnicas pendientes están registradas en NEX-DOC-006 (AT-02 a
-AT-09). No se han resuelto ni implementado en esta fase.
+Este repositorio no contiene documentación (petición de la profesora; ADR-0002 v0.2). Toda la documentación del proyecto, incluida la técnica del frontend, está en la carpeta independiente **Nexora-Documentation**: `10-frontend/` (arquitectura, estructura, pruebas y demás) y el resto de carpetas (requisitos, flujos, dominio, diseño, decisiones).
