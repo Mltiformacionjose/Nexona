@@ -1,26 +1,74 @@
 @import "tailwindcss";
 
+/*
+ * Tokens de diseño de Nexora, tomados del prototipo aprobado (prototype.html).
+ * Tema único: oscuro con acento violeta (NEX-DOC-007 §2). No hay tema claro diseñado.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: dark;
+
+  --canvas: #0e1016;
+  --sidebar: #0b0d12;
+  --panel: #171b25;
+  --panel-2: #1b202c;
+  --line: #293142;
+  --chip: #252b38;
+
+  --fg: #edf0f7;
+  --muted: #929bad;
+
+  --accent: #9182fa;
+  --accent-soft: #332d55;
+  --accent-tint: #292442;
+  --accent-text: #b9adff;
+
+  --info: #61a8f0;
+  --success: #45c692;
+  --warning: #e6aa51;
+  --warning-soft: #302515;
+  --danger: #e46d75;
+  --danger-soft: #48252d;
+  --danger-text: #ffc1c6;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-canvas: var(--canvas);
+  --color-sidebar: var(--sidebar);
+  --color-panel: var(--panel);
+  --color-panel-2: var(--panel-2);
+  --color-line: var(--line);
+  --color-chip: var(--chip);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-tint: var(--accent-tint);
+  --color-accent-text: var(--accent-text);
+
+  --color-info: var(--info);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-danger-text: var(--danger-text);
+
+  --radius-panel: 13px;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--canvas);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: 14px;
+}
+
+/* Accesibilidad: foco visible en todos los controles (NEX-DOC-007 §3 y §21). */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
