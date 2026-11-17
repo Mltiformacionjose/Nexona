@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button, ButtonLink } from "@/components/ui/button";
+import { TextAreaField, TextField } from "@/components/ui/field";
 import { Panel } from "@/components/ui/panel";
 import { Pill } from "@/components/ui/pill";
 
@@ -57,6 +58,22 @@ export default function Home() {
         }
       >
         <p className="text-sm text-muted">Contenido del panel.</p>
+      </Panel>
+
+      <Panel title="Información de la tarea" description="Campos de formulario (estados de ejemplo).">
+        <TextField label="Título *" placeholder="Ej. Preparar presentación del proyecto" />
+        <TextAreaField
+          label="Descripción"
+          optional
+          placeholder="Añade detalles, instrucciones o información útil..."
+        />
+        <TextField
+          label="Fecha de vencimiento"
+          optional
+          type="date"
+          hint="Puedes crear tareas sin fecha y añadirla más adelante."
+        />
+        <TextField label="Correo electrónico" type="email" defaultValue="correo-no-valido" error="Introduce un correo válido." />
       </Panel>
     </main>
   );
