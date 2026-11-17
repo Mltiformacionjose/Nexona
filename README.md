@@ -27,17 +27,16 @@ Nexona-1/
 │   ├── alembic/             # migraciones
 │   ├── tests/
 │   └── requirements.txt
-├── frontend/                # Next.js App Router + React + TypeScript + Tailwind
-│   ├── src/
-│   │   ├── app/             # rutas y layouts
-│   │   ├── components/      # ui y layout
-│   │   ├── features/        # auth, lists, tasks, invitations, notifications, dashboard
-│   │   ├── hooks/
-│   │   ├── services/
-│   │   ├── lib/
-│   │   └── types/
-│   └── public/
-└── documentation/           # documentación funcional, de diseño y de datos
+└── frontend/                # Next.js App Router + React + TypeScript + Tailwind
+    ├── src/
+    │   ├── app/             # rutas y layouts
+    │   ├── components/      # ui y layout
+    │   ├── features/        # auth, lists, tasks, invitations, notifications, dashboard
+    │   ├── hooks/
+    │   ├── services/
+    │   ├── lib/
+    │   └── types/
+    └── public/
 ```
 
 ## Requisitos
@@ -84,17 +83,7 @@ npx tsc --noEmit
 
 ## Documentación
 
-La carpeta `documentation/` es la fuente de verdad funcional, de diseño y de
-datos. No debe modificarse durante las tareas de infraestructura.
-
-Documentos principales:
-
-- NEX-DOC-001 v0.4 — Análisis funcional y cierre de Fase 1.
-- NEX-DOC-002 v0.2 — Roadmap.
-- NEX-DOC-004 v0.2 — Modelo de dominio y entidades.
-- NEX-DOC-005 v0.3 — Modelo de datos (provisional).
-- NEX-DOC-006 v0.2 — Arquitectura técnica.
-- NEX-DOC-007 v0.5 — Diseño de interfaz y wireframes.
+Este repositorio no contiene documentación (petición de la profesora). Toda la documentación del proyecto está en la carpeta independiente **Nexora-Documentation**: requisitos, flujos, dominio, diseño, decisiones y la documentación técnica de frontend (`10-frontend/`) y backend (`11-backend/`). El `.gitignore` excluye `docs/` y `documentation/`.
 
 ## Decisiones pendientes
 

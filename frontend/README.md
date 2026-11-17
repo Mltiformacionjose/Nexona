@@ -10,11 +10,11 @@ Nexora es una aplicación web de gestión de tareas y listas personales y compar
 2. Cuenta de demostración: **demo@nexora.app** / **nexora-demo-1234**.
 3. Nueva tarea: `/lists/1/tasks/new` (lista compartida, con responsables) o `/lists/2/tasks/new` (lista personal, sin responsables). Una cuenta recién registrada no es miembro de esas listas y verá el mensaje de lista no accesible, como haría el backend.
 
-Los datos simulados se borran al cerrar la pestaña. Cuando el backend tenga endpoints, pon `NEXT_PUBLIC_API_MODE=http` en `.env.local`. Las pantallas no cambian y `npm run smoke:api` comprueba la API real ([TESTING_FRONTEND](docs/TESTING_FRONTEND.md)).
+Los datos simulados se borran al cerrar la pestaña. Cuando el backend tenga endpoints, pon `NEXT_PUBLIC_API_MODE=http` en `.env.local`. Las pantallas no cambian y `npm run smoke:api` comprueba la API real (TESTING_FRONTEND, `Nexora-Documentation/10-frontend/TESTING_FRONTEND.md`).
 
 ## Responsabilidad del frontend
 
-Mostrar la interfaz, recoger acciones del usuario y comunicarse con la API del backend. **No accede a PostgreSQL**, no aplica reglas de negocio ni sustituye la autorización del backend. Ver [ARCHITECTURE_FRONTEND](docs/ARCHITECTURE_FRONTEND.md).
+Mostrar la interfaz, recoger acciones del usuario y comunicarse con la API del backend. **No accede a PostgreSQL**, no aplica reglas de negocio ni sustituye la autorización del backend. Ver ARCHITECTURE_FRONTEND (`Nexora-Documentation/10-frontend/ARCHITECTURE_FRONTEND.md`).
 
 ## Tecnologías
 
@@ -60,7 +60,7 @@ npm run start       # sirve la compilación
 npm run smoke:api   # escenarios contra la API real (requiere backend)
 ```
 
-A 2026-11-17 pasan lint, tipos y build. No hay pruebas automáticas de interfaz todavía ([TESTING_FRONTEND](docs/TESTING_FRONTEND.md)).
+A 2026-11-17 pasan lint, tipos y build. No hay pruebas automáticas de interfaz todavía (TESTING_FRONTEND, `Nexora-Documentation/10-frontend/TESTING_FRONTEND.md`).
 
 ## Estructura del proyecto
 
@@ -72,18 +72,12 @@ src/features/       auth/ y tasks/ (formularios y pantallas); el resto vacías
 src/services/       llamadas a la API y modo simulado (mock/)
 src/lib/ types/     utilidades, validaciones y tipos de la API
 scripts/            api-smoke.mjs
-docs/               documentación del frontend
 ```
 
 ## Comunicación con el backend
 
-Todas las llamadas pasan por `src/services/` (JSON, sesión por cookie `HttpOnly`, `credentials: "include"`). **El contrato HTTP está en estado de propuesta** y no hay endpoints implementados: ver el [contrato de API del backend](../../Nexora_Backend/backend/docs/API_CONTRACT.md). Si el backend usa otro dominio, tendrá que permitir CORS con credenciales para el origen del frontend (AT-04, Pendiente).
+Todas las llamadas pasan por `src/services/` (JSON, sesión por cookie `HttpOnly`, `credentials: "include"`). **El contrato HTTP está en estado de propuesta** y no hay endpoints implementados: ver el contrato de API del backend (`Nexora-Documentation/11-backend/API_CONTRACT.md`). Si el backend usa otro dominio, tendrá que permitir CORS con credenciales para el origen del frontend (AT-04, Pendiente).
 
 ## Documentación
 
-- [Estructura del proyecto](docs/STRUCTURE_FRONTEND.md)
-- [Arquitectura del frontend (006A)](docs/ARCHITECTURE_FRONTEND.md)
-- [Componentes](docs/COMPONENTS.md)
-- [Handoff de Figma](docs/FIGMA_HANDOFF.md)
-- [Pruebas](docs/TESTING_FRONTEND.md)
-- Documentación general del proyecto (requisitos, flujos, dominio, arquitectura global, decisiones): carpeta independiente `Nexora-Documentation`, fuera de este repositorio.
+Este repositorio no contiene documentación (petición de la profesora; ADR-0002 v0.2). Toda la documentación del proyecto, incluida la técnica del frontend, está en la carpeta independiente **Nexora-Documentation**: `10-frontend/` (arquitectura, estructura, pruebas y demás) y el resto de carpetas (requisitos, flujos, dominio, diseño, decisiones).

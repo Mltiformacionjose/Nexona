@@ -47,3 +47,9 @@ yarn-error.log*
 .pnpm-debug.log*
 *.tsbuildinfo
 next-env.d.ts
+
+# Documentación: no se versiona en este repositorio (petición de la profesora).
+# Toda vive en la carpeta independiente Nexora-Documentation (ADR-0002 v0.2).
+docs/
+documentation/
+documentation.zip
