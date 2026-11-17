@@ -14,6 +14,7 @@
 | Versión | Fecha | Cambio |
 |---|---|---|
 | v0.1 | 2026-11-17 | Primera versión. |
+| v0.2 | 2026-11-17 | Árbol actualizado con rutas, servicios, formularios y scripts. |
 
 Este archivo responde a «¿dónde está cada cosa y dónde va lo nuevo?». Para el porqué de cada capa, ver [ARCHITECTURE_FRONTEND](ARCHITECTURE_FRONTEND.md).
 
@@ -24,13 +25,13 @@ Todo lo que no figura como «con contenido» está vacío (solo `.gitkeep`).
 ```
 frontend/
 ├── README.md                    Guía de entrada (instalación, comandos, enlaces)
-├── package.json                 Dependencias y scripts: dev, build, start, lint
+├── package.json                 Dependencias y scripts: dev, build, start, lint, typecheck, smoke:api
 ├── package-lock.json            Versiones exactas (usar `npm ci`)
 ├── next.config.ts               Opciones de Next.js (cacheComponents, partialPrefetching, Turbopack + Tailwind)
 ├── tsconfig.json                TypeScript estricto; alias @/* -> src/*
 ├── eslint.config.mjs            ESLint: core-web-vitals + typescript
 ├── next-env.d.ts                Tipos generados por Next.js (no editar)
-├── .env.example                 Variables de entorno de ejemplo (NEXT_PUBLIC_API_URL)
+├── .env.example                 Variables de entorno de ejemplo (NEXT_PUBLIC_API_MODE, NEXT_PUBLIC_API_URL)
 ├── .env.local                   Valores reales locales (ignorado por Git; no documentar su contenido)
 ├── public/                      Recursos estáticos: SVG de la plantilla (file, globe, next, vercel, window)
 ├── src/
@@ -39,17 +40,22 @@ frontend/
 │   │   ├── page.tsx             [TEMPORAL] muestrario de componentes; se sustituirá por el Dashboard
 │   │   ├── globals.css          [con contenido] tokens de diseño (tema oscuro violeta) y foco visible
 │   │   ├── favicon.ico
-│   │   ├── (public)/            vacío. Previsto: acceso sin sesión
-│   │   └── (private)/           vacío. Previsto: pantallas con sesión
+│   │   ├── (public)/            [con contenido] layout (fondo), login/, register/, forgot-password/
+│   │   └── (private)/           [con contenido] layout (sesión + barra lateral), lists/[listId]/tasks/new/
 │   ├── components/
-│   │   ├── ui/                  [con contenido] button, badge, pill, panel, field (ver COMPONENTS.md)
-│   │   └── layout/              vacío. Previsto: shell, navegación lateral, cabecera
-│   ├── features/                vacío. Una carpeta por área:
-│   │   ├── auth/  lists/  tasks/  invitations/  notifications/  dashboard/
+│   │   ├── ui/                  [con contenido] button, badge, pill, panel, field, alert (ver COMPONENTS.md)
+│   │   └── layout/              [con contenido] sidebar, page-header
+│   ├── features/                Una carpeta por área:
+│   │   ├── auth/                [con contenido] auth-card, formularios de acceso, session-provider
+│   │   ├── tasks/               [con contenido] task-form, new-task-screen, status
+│   │   └── lists/  invitations/  notifications/  dashboard/   vacías
 │   ├── hooks/                   vacío. Lógica React reutilizable
-│   ├── services/                vacío. Llamadas a la API (ningún componente llama a una URL directamente)
-│   ├── lib/                     [con contenido] cn.ts (unir nombres de clase)
-│   └── types/                   vacío. Tipos de las respuestas de la API
+│   ├── services/                [con contenido] Única capa que llama a la API: config, http, errors,
+│   │   │                        auth, lists, tasks
+│   │   └── mock/db.ts           Datos simulados (modo por defecto mientras no haya backend)
+│   ├── lib/                     [con contenido] cn.ts, validation.ts
+│   └── types/                   [con contenido] api.ts (tipos del contrato)
+├── scripts/api-smoke.mjs        Escenarios contra la API real (npm run smoke:api)
 └── docs/                        Documentación específica del frontend
     ├── ARCHITECTURE_FRONTEND.md Arquitectura (006A)
     ├── COMPONENTS.md            Componentes previstos
@@ -58,7 +64,9 @@ frontend/
     └── STRUCTURE_FRONTEND.md    Este archivo
 ```
 
-No existen: `proxy.ts`, carpeta de pruebas ni `tests/`; tampoco pantallas de Nexora (solo el muestrario temporal) ni componentes de `layout/` o `features/`.
+No existen: `proxy.ts` ni carpeta de pruebas automáticas. Pantallas implementadas: WF-004, WF-007, WF-008 y WF-009; `/` sigue siendo el muestrario temporal.
+
+Una llamada nueva a la API se añade en `src/services/<área>.ts`, con su versión `http` y su versión en `mock/db.ts`, para que la pantalla funcione en los dos modos.
 
 ## 2. Dónde va lo nuevo [PROPUESTA, derivada de ARCHITECTURE_FRONTEND]
 

@@ -2,7 +2,15 @@
 
 Nexora es una aplicación web de gestión de tareas y listas personales y compartidas: permite crear y organizar tareas, compartir listas con otras personas, recibir avisos y ver un resumen del trabajo. Este repositorio contiene el **frontend**, la interfaz de usuario. El backend vive en otro repositorio.
 
-> **Estado real (2026-11-17):** desarrollo en marcha, pieza a pieza y con un commit por pieza. Hecho: fundación visual del diseño aprobado (tema oscuro violeta, Inter, español) y los primitivos `Button`, `Badge`, `Pill`, `Panel` y campos de formulario. La página `/` es un muestrario temporal. **Todavía no hay pantallas de Nexora ni conexión con la API.** Ver [COMPONENTS](docs/COMPONENTS.md).
+> **Estado real (2026-11-17):** desarrollo en marcha, pieza a pieza y con un commit por pieza. Hecho: fundación visual del diseño aprobado, componentes base, capa de servicios hacia la API y las pantallas **inicio de sesión (WF-007), registro (WF-008), recuperar contraseña (WF-009) y nueva tarea (WF-004)**, dentro del marco con barra lateral. Como el backend aún no tiene endpoints, funcionan en **modo simulado**: los datos viven en el navegador y no se guarda nada en una base de datos. La página `/` sigue siendo un muestrario temporal.
+
+## Probar las pantallas (modo simulado)
+
+1. `npm run dev` y abre `http://localhost:3000/register` o `/login`.
+2. Cuenta de demostración: **demo@nexora.app** / **nexora-demo-1234**.
+3. Nueva tarea: `/lists/1/tasks/new` (lista compartida, con responsables) o `/lists/2/tasks/new` (lista personal, sin responsables). Una cuenta recién registrada no es miembro de esas listas y verá el mensaje de lista no accesible, como haría el backend.
+
+Los datos simulados se borran al cerrar la pestaña. Cuando el backend tenga endpoints, pon `NEXT_PUBLIC_API_MODE=http` en `.env.local`. Las pantallas no cambian y `npm run smoke:api` comprueba la API real ([TESTING_FRONTEND](docs/TESTING_FRONTEND.md)).
 
 ## Responsabilidad del frontend
 
@@ -31,7 +39,8 @@ Copia `.env.example` a `.env.local` y ajusta el valor. `.env.local` está ignora
 
 | Variable | Descripción |
 |---|---|
-| `NEXT_PUBLIC_API_URL` | URL base de la API del backend (ejemplo: `http://localhost:8000/api/v1`). Es **pública**: no pongas secretos. Todavía no se lee en el código. |
+| `NEXT_PUBLIC_API_MODE` | `mock` (por defecto, datos simulados) o `http` (API real). |
+| `NEXT_PUBLIC_API_URL` | URL base de la API del backend (ejemplo: `http://localhost:8000/api/v1`). Solo se usa en modo `http`. Es **pública**: no pongas secretos. |
 
 ## Ejecución local
 
@@ -39,33 +48,36 @@ Copia `.env.example` a `.env.local` y ajusta el valor. `.env.local` está ignora
 npm run dev
 ```
 
-Abre `http://localhost:3000`. Hoy muestra la página de bienvenida de la plantilla.
+Abre `http://localhost:3000`. Rutas disponibles: `/login`, `/register`, `/forgot-password`, `/lists/[listId]/tasks/new` y `/` (muestrario temporal).
 
 ## Comandos de comprobación y build
 
 ```powershell
 npm run lint        # ESLint
-npx tsc --noEmit    # comprobación de tipos (no es un script del proyecto)
+npm run typecheck   # TypeScript
 npm run build       # compilación de producción
 npm run start       # sirve la compilación
+npm run smoke:api   # escenarios contra la API real (requiere backend)
 ```
 
-No hay pruebas automáticas todavía ([TESTING_FRONTEND](docs/TESTING_FRONTEND.md)). Este README no afirma que estos comandos pasen.
+A 2026-11-17 pasan lint, tipos y build. No hay pruebas automáticas de interfaz todavía ([TESTING_FRONTEND](docs/TESTING_FRONTEND.md)).
 
 ## Estructura del proyecto
 
 ```
-src/app/            rutas y layouts; grupos (public) y (private) vacíos
-src/components/     ui/ y layout/ (vacíos)
-src/features/       auth, lists, tasks, invitations, notifications, dashboard (vacíos)
-src/hooks/ services/ lib/ types/   (vacíos)
-public/             recursos estáticos (SVG de la plantilla)
+src/app/(public)/   login, register, forgot-password (sin sesión)
+src/app/(private)/  marco con barra lateral; lists/[listId]/tasks/new
+src/components/     ui/ (primitivos) y layout/ (barra lateral, encabezado)
+src/features/       auth/ y tasks/ (formularios y pantallas); el resto vacías
+src/services/       llamadas a la API y modo simulado (mock/)
+src/lib/ types/     utilidades, validaciones y tipos de la API
+scripts/            api-smoke.mjs
 docs/               documentación del frontend
 ```
 
 ## Comunicación con el backend
 
-El frontend llamará a la API HTTP del backend (JSON, sesión por cookie) desde `src/services/`. **El contrato HTTP está en estado de propuesta** y no hay endpoints implementados: ver el [contrato de API del backend](../../Nexora_Backend/backend/docs/API_CONTRACT.md).
+Todas las llamadas pasan por `src/services/` (JSON, sesión por cookie `HttpOnly`, `credentials: "include"`). **El contrato HTTP está en estado de propuesta** y no hay endpoints implementados: ver el [contrato de API del backend](../../Nexora_Backend/backend/docs/API_CONTRACT.md). Si el backend usa otro dominio, tendrá que permitir CORS con credenciales para el origen del frontend (AT-04, Pendiente).
 
 ## Documentación
 
