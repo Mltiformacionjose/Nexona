@@ -1,12 +1,32 @@
+import { Button, ButtonLink } from "@/components/ui/button";
+
 /*
- * Página TEMPORAL. Sustituye a la de la plantilla de create-next-app mientras se
- * construyen las piezas de la interfaz. Se reemplazará por el Dashboard (WF-001).
+ * Página TEMPORAL que sirve de muestrario de componentes mientras se construyen las
+ * piezas de la interfaz. Se reemplazará por el Dashboard (WF-001).
  */
 export default function Home() {
   return (
-    <main className="flex flex-1 flex-col items-center justify-center gap-3 px-6 text-center">
-      <p className="text-2xl font-extrabold tracking-wide">NEXORA</p>
-      <p className="text-sm text-muted">Interfaz en construcción.</p>
+    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-8 px-6 py-12">
+      <header>
+        <p className="text-2xl font-extrabold tracking-wide">NEXORA</p>
+        <p className="mt-1 text-sm text-muted">Muestrario de componentes (temporal).</p>
+      </header>
+
+      <section aria-labelledby="botones" className="flex flex-col gap-3">
+        <h2 id="botones" className="text-base font-bold">
+          Botones
+        </h2>
+        <div className="flex flex-wrap gap-3">
+          <Button>Crear tarea</Button>
+          <Button variant="secondary">Marcar todas como leídas</Button>
+          <Button variant="ghost">Ver calendario</Button>
+          <Button variant="danger">Expulsar</Button>
+          <Button disabled>Deshabilitado</Button>
+          <ButtonLink href="/" variant="ghost">
+            Enlace con aspecto de botón
+          </ButtonLink>
+        </div>
+      </section>
     </main>
   );
 }
