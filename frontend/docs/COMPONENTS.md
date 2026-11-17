@@ -15,6 +15,7 @@
 |---|---|---|
 | v0.1 | 2026-11-17 | Inventario de componentes reutilizables identificados en NEX-DOC-007 §20 y en las pantallas. |
 | v0.2 | 2026-11-17 | Se implementan Button, ButtonLink, Badge, Pill, Panel, TextField y TextAreaField. Se añade la tabla de contraste. |
+| v0.3 | 2026-11-17 | Se implementan Alert, Sidebar, PageHeader y el selector de responsables de WF-004. |
 
 ## 1. Estado
 
@@ -31,6 +32,12 @@ La muestra visual de cada uno está en la página temporal `/` (muestrario), que
 | `Pill` | `ui/pill.tsx` | Punto opcional `info`, `accent`, `success`, `danger`; el texto siempre acompaña al color | Estado de tarea, rol «Participante» |
 | `Panel` | `ui/panel.tsx` | Encabezado opcional: título (h2), descripción y acciones | Paneles y tarjetas de todas las pantallas |
 | `TextField`, `TextAreaField` | `ui/field.tsx` | Etiqueta, «Opcional», ayuda y error; estados normal, error y deshabilitado | Formularios WF-004, WF-005, WF-007 a WF-009 |
+| `Alert` | `ui/alert.tsx` | `danger` (`role="alert"`) y `success` (`role="status"`) | Mensaje general de un formulario |
+| `Sidebar` | `layout/sidebar.tsx` | Componente de cliente: enlace activo con `aria-current`; barra superior en pantallas estrechas; perfil y cierre de sesión | Pantallas con sesión |
+| `PageHeader` | `layout/page-header.tsx` | Antetítulo o migas, título, descripción y acciones | Pantallas con sesión |
+| Selector de responsables | `features/tasks/task-form.tsx` | Casillas con aspecto de etiqueta; solo miembros; oculto en listas personales | WF-004 |
+
+`Sidebar` y los formularios son componentes de cliente porque usan estado o la ruta actual. El resto sigue siendo de servidor.
 
 Accesibilidad de los campos: la etiqueta está unida al control (`htmlFor`), la ayuda y el error por `aria-describedby`, el error usa `aria-invalid` y `role="alert"`. El foco visible es global (`globals.css`).
 
@@ -40,14 +47,12 @@ Derivados de NEX-DOC-007 §20; todavía **no implementados**.
 
 | Componente | Pantallas donde aparece | Notas |
 |---|---|---|
-| Shell autenticado (barra lateral, perfil) | WF-001 a WF-006, WF-010 a WF-013 | Navegación del prototipo aprobado: Inicio, Mis listas, Invitaciones, Notificaciones, Ajustes |
-| Cabecera de página (ruta, título, descripción, acción) | La mayoría | — |
+| Contadores de la barra lateral (invitaciones, avisos) | Shell | Llegarán con WF-006 y WF-013 |
 | Tarjetas de resumen, de lista y de tarea | WF-001, WF-002, WF-003, WF-012 | Sobre `Panel` |
 | Selector de vistas (Lista, Calendario, Kanban) y de presentación (Cuadrícula, Lista) | WF-001, WF-002, WF-003, WF-011, WF-012 | Necesita interacción en el cliente |
-| Selector múltiple de responsables | WF-004 | Solo en listas compartidas |
 | Interruptor (toggle) | WF-010 | — |
 | Avatares y grupos de participantes | WF-002, WF-003, WF-005, WF-012 | — |
-| Alertas, mensajes vacíos, confirmaciones y toasts | Transversal | Estados de [FIGMA_HANDOFF](FIGMA_HANDOFF.md) §6 |
+| Mensajes vacíos, confirmaciones y toasts | Transversal | Estados de [FIGMA_HANDOFF](FIGMA_HANDOFF.md) §6 |
 
 ## 4. Reglas
 
