@@ -1,4 +1,6 @@
+import { Badge } from "@/components/ui/badge";
 import { Button, ButtonLink } from "@/components/ui/button";
+import { Pill } from "@/components/ui/pill";
 
 /*
  * Página TEMPORAL que sirve de muestrario de componentes mientras se construyen las
@@ -25,6 +27,22 @@ export default function Home() {
           <ButtonLink href="/" variant="ghost">
             Enlace con aspecto de botón
           </ButtonLink>
+        </div>
+      </section>
+
+      <section aria-labelledby="etiquetas" className="flex flex-col gap-3">
+        <h2 id="etiquetas" className="text-base font-bold">
+          Etiquetas y estados
+        </h2>
+        <div className="flex flex-wrap items-center gap-3">
+          <Badge>Personal</Badge>
+          <Badge>Compartida</Badge>
+          <Badge tone="warning">Pendiente</Badge>
+          <Pill tone="info">Por hacer</Pill>
+          <Pill tone="accent">En progreso</Pill>
+          <Pill tone="success">Hecha</Pill>
+          <Pill tone="danger">Vencida</Pill>
+          <Pill>Participante</Pill>
         </div>
       </section>
     </main>
