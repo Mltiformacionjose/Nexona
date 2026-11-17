@@ -2,7 +2,7 @@
 
 Nexora es una aplicación web de gestión de tareas y listas personales y compartidas: permite crear y organizar tareas, compartir listas con otras personas, recibir avisos y ver un resumen del trabajo. Este repositorio contiene el **frontend**, la interfaz de usuario. El backend vive en otro repositorio.
 
-> **Estado real (2026-11-17):** el proyecto es la plantilla de create-next-app con la estructura de carpetas creada y vacía. **Todavía no hay pantallas de Nexora ni conexión con la API.** El diseño (Figma) tiene 5 de 13 pantallas.
+> **Estado real (2026-11-17):** desarrollo en marcha, pieza a pieza y con un commit por pieza. Hecho: fundación visual del diseño aprobado (tema oscuro violeta, Inter, español) y los primitivos `Button`, `Badge`, `Pill`, `Panel` y campos de formulario. La página `/` es un muestrario temporal. **Todavía no hay pantallas de Nexora ni conexión con la API.** Ver [COMPONENTS](docs/COMPONENTS.md).
 
 ## Responsabilidad del frontend
 

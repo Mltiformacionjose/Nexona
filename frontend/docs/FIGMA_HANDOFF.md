@@ -44,6 +44,8 @@
 | WF-012 | Kanban | No existe | — | Solo prototipo | — | No |
 | WF-013 | Invitaciones recibidas | No existe | — | Solo prototipo | — | No |
 
+**Aprobación declarada (2026-11-17):** el desarrollador comunica que el diseño ha sido aprobado y que el prototipo HTML «le ha gustado» a la profesora, y que el frontend se desarrollará siguiendo ese prototipo. Es la evidencia que se registra. **Alcance por confirmar:** si cubre las 13 pantallas tal como están en el prototipo (incluido el botón «Rechazar» y la navegación con «Invitaciones», I-25), y la adaptación a pantallas estrechas (I-26). Hasta confirmarlo, la tabla de arriba conserva los estados anteriores y el desarrollo sigue el prototipo.
+
 Una pantalla dibujada en Figma **no** está aprobada por ese hecho. WF-003, WF-004 y WF-005 requieren validación expresa (P-13). WF-006 a WF-013 siguen siendo referencias del prototipo (P-18).
 
 ## 3. Navegación

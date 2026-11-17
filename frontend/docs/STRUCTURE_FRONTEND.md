@@ -35,20 +35,20 @@ frontend/
 ├── public/                      Recursos estáticos: SVG de la plantilla (file, globe, next, vercel, window)
 ├── src/
 │   ├── app/                     Rutas y layouts (App Router)
-│   │   ├── layout.tsx           [con contenido] layout raíz de la plantilla
-│   │   ├── page.tsx             [con contenido] página de bienvenida de la plantilla
-│   │   ├── globals.css          [con contenido] Tailwind + tema claro/oscuro de la plantilla
+│   │   ├── layout.tsx           [con contenido] layout raíz: lang="es", Inter, metadatos de Nexora
+│   │   ├── page.tsx             [TEMPORAL] muestrario de componentes; se sustituirá por el Dashboard
+│   │   ├── globals.css          [con contenido] tokens de diseño (tema oscuro violeta) y foco visible
 │   │   ├── favicon.ico
 │   │   ├── (public)/            vacío. Previsto: acceso sin sesión
 │   │   └── (private)/           vacío. Previsto: pantallas con sesión
 │   ├── components/
-│   │   ├── ui/                  vacío. Previsto: componentes visuales sin lógica de dominio
+│   │   ├── ui/                  [con contenido] button, badge, pill, panel, field (ver COMPONENTS.md)
 │   │   └── layout/              vacío. Previsto: shell, navegación lateral, cabecera
 │   ├── features/                vacío. Una carpeta por área:
 │   │   ├── auth/  lists/  tasks/  invitations/  notifications/  dashboard/
 │   ├── hooks/                   vacío. Lógica React reutilizable
 │   ├── services/                vacío. Llamadas a la API (ningún componente llama a una URL directamente)
-│   ├── lib/                     vacío. Utilidades y configuración compartida
+│   ├── lib/                     [con contenido] cn.ts (unir nombres de clase)
 │   └── types/                   vacío. Tipos de las respuestas de la API
 └── docs/                        Documentación específica del frontend
     ├── ARCHITECTURE_FRONTEND.md Arquitectura (006A)
@@ -58,7 +58,7 @@ frontend/
     └── STRUCTURE_FRONTEND.md    Este archivo
 ```
 
-No existen: `proxy.ts`, carpeta de pruebas, `tests/`, ni ningún componente propio.
+No existen: `proxy.ts`, carpeta de pruebas ni `tests/`; tampoco pantallas de Nexora (solo el muestrario temporal) ni componentes de `layout/` o `features/`.
 
 ## 2. Dónde va lo nuevo [PROPUESTA, derivada de ARCHITECTURE_FRONTEND]
 
@@ -96,5 +96,5 @@ Las rutas concretas **no están definidas**. El prototipo HTML y el diseño no d
 ## 5. Observaciones sobre la estructura actual
 
 - El nombre del paquete en `package.json` es `nexona` (grafía heredada; inconsistencia I-19). No se cambia en esta fase.
-- `layout.tsx` y `page.tsx` son de la plantilla (inconsistencia I-20).
+- `layout.tsx` ya no es la plantilla (I-20 corregida en el código); `page.tsx` es un muestrario temporal. Los SVG de `public/` son de la plantilla y no se usan.
 - La estructura física (esta carpeta `frontend/` dentro de un repositorio con otro nombre) es **provisional**: la subida de su contenido a la raíz del repositorio está aplazada (ADR-0002).

@@ -23,7 +23,7 @@ Leyenda: **[IMPLEMENTADO]** existe en el código; **[PROPUESTA]** descrito en do
 
 El frontend es la interfaz de Nexora: pantallas, navegación, formularios y presentación de datos. **No accede a PostgreSQL ni contiene reglas de negocio ni comprobaciones de permisos como barrera de seguridad**; todo eso es del backend.
 
-**Estado real:** el proyecto es la plantilla de create-next-app con la estructura de carpetas creada (todas vacías, con `.gitkeep`). **No hay pantallas de Nexora, componentes, llamadas a la API ni autenticación.**
+**Estado real (2026-11-17):** la fundación visual está aplicada (tokens del diseño aprobado, Inter, `lang="es"`) y existen los primitivos de `components/ui` (Button, ButtonLink, Badge, Pill, Panel, TextField, TextAreaField; ver [COMPONENTS](COMPONENTS.md)). La página `/` es un muestrario temporal. **Todavía no hay pantallas de Nexora, llamadas a la API ni autenticación.**
 
 ## 2. Tecnologías reales
 
@@ -47,14 +47,16 @@ No hay biblioteca de componentes, de formularios, de estado global, de peticione
 frontend/
 ├── src/
 │   ├── app/
-│   │   ├── layout.tsx        [IMPLEMENTADO] plantilla: Geist, title "Create Next App", lang="en"
-│   │   ├── page.tsx          [IMPLEMENTADO] página de bienvenida de la plantilla
-│   │   ├── globals.css       [IMPLEMENTADO] tema claro/oscuro de la plantilla
+│   │   ├── layout.tsx        [IMPLEMENTADO] lang="es", fuente Inter, metadatos de Nexora
+│   │   ├── page.tsx          [TEMPORAL] muestrario de componentes
+│   │   ├── globals.css       [IMPLEMENTADO] tokens del tema oscuro violeta y foco visible
 │   │   ├── (public)/         vacío (.gitkeep)  -> rutas sin sesión [PROPUESTA]
 │   │   └── (private)/        vacío (.gitkeep)  -> rutas con sesión [PROPUESTA]
-│   ├── components/ui/ layout/        vacíos
+│   ├── components/ui/                [IMPLEMENTADO] button, badge, pill, panel, field
+│   ├── components/layout/            vacío
 │   ├── features/auth/ lists/ tasks/ invitations/ notifications/ dashboard/   vacíos
-│   ├── hooks/ services/ lib/ types/  vacíos
+│   ├── lib/                          [IMPLEMENTADO] cn.ts
+│   ├── hooks/ services/ types/       vacíos
 ├── public/                   SVG de la plantilla
 ├── next.config.ts  tsconfig.json  eslint.config.mjs  package.json  .env.example
 └── docs/                     esta documentación
@@ -90,7 +92,7 @@ Propuesta: sesión por cookie `HttpOnly` gestionada por el backend; el frontend 
 
 ## 10. Diseño responsive y accesibilidad
 
-Criterios de NEX-DOC-007 (desktop-first, adaptación móvil posterior; no depender solo del color; etiquetas visibles; foco visible; teclado). Hoy el CSS es el de la plantilla: **el tema oscuro violeta del diseño no está implementado** (la plantilla solo alterna claro/oscuro con `prefers-color-scheme`). Tokens de diseño pendientes ([FIGMA_HANDOFF](FIGMA_HANDOFF.md)).
+Criterios de NEX-DOC-007 (desktop-first, adaptación móvil posterior; no depender solo del color; etiquetas visibles; foco visible; teclado). El tema oscuro violeta ya está implementado como tokens CSS en `globals.css` (tema único; no hay tema claro diseñado) con tipografía Inter y foco visible global. Los textos son de 12 px como mínimo (el prototipo usa 8–10 px). Contraste: todo cumple WCAG AA salvo el botón primario (3,10:1); ver [COMPONENTS](COMPONENTS.md) §5. La adaptación móvil no está implementada.
 
 ## 11. Variables de entorno
 
@@ -110,11 +112,10 @@ Ver [TESTING_FRONTEND](TESTING_FRONTEND.md) y el [README](../README.md). Scripts
 |---|---|
 | `features/*` con componentes por área | Carpetas vacías |
 | Pruebas con herramienta por elegir (AT-08) | Sin herramienta |
-| Interfaz oscura violeta | CSS de plantilla |
-| Metadatos del producto | `title: "Create Next App"`, `lang="en"` (I-20) |
+| Interfaz oscura violeta | Implementada como tokens y primitivos |
+| Metadatos del producto | Corregidos (`title: "Nexora"`, `lang="es"`); I-20 resuelta en el código |
 
 ## 14. Mejoras propuestas (no aprobadas)
 
-- Sustituir los metadatos de la plantilla por los de Nexora y fijar el idioma (`es`).
 - Añadir un script de comprobación de tipos (`tsc --noEmit`) cuando haya código.
 - Elegir herramienta de pruebas (AT-08). Next.js documenta Jest, Vitest, Playwright y Cypress en `node_modules/next/dist/docs/01-app/02-guides/testing/`.
