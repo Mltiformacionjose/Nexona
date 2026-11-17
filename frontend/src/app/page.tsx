@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button, ButtonLink } from "@/components/ui/button";
+import { Panel } from "@/components/ui/panel";
 import { Pill } from "@/components/ui/pill";
 
 /*
@@ -45,6 +46,18 @@ export default function Home() {
           <Pill>Participante</Pill>
         </div>
       </section>
+
+      <Panel
+        title="Próximas tareas"
+        description="Panel con encabezado, descripción y acción."
+        actions={
+          <Button variant="ghost" className="shrink-0">
+            Ver calendario
+          </Button>
+        }
+      >
+        <p className="text-sm text-muted">Contenido del panel.</p>
+      </Panel>
     </main>
   );
 }
