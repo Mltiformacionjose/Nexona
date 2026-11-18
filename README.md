@@ -8,7 +8,8 @@ Nexora es una aplicación web de gestión de tareas y listas personales y compar
 
 1. `npm run dev` y abre `http://localhost:3000/register` o `/login`.
 2. Cuenta de demostración: **demo@nexora.app** / **nexora-demo-1234**.
-3. Nueva tarea: `/lists/1/tasks/new` (lista compartida, con responsables) o `/lists/2/tasks/new` (lista personal, sin responsables). Una cuenta recién registrada no es miembro de esas listas y verá el mensaje de lista no accesible, como haría el backend.
+3. Nueva tarea: `/lists/1/tasks/new` (lista compartida «Proyecto Nexora», con responsables) o `/lists/2/tasks/new` («Mis tareas» de la cuenta demo, sin responsables).
+4. Cada cuenta nueva recibe su propia lista «Mis tareas», como propone el modelo de datos v0.6. La primera cuenta que registres la tendrá en `/lists/5/tasks/new`. Las listas de otras personas responden «lista no accesible», como haría el backend.
 
 Los datos simulados se borran al cerrar la pestaña. Cuando el backend tenga endpoints, pon `NEXT_PUBLIC_API_MODE=http` en `.env.local`. Las pantallas no cambian y `npm run smoke:api` comprueba la API real (TESTING_FRONTEND, `Nexora-Documentation/10-frontend/TESTING_FRONTEND.md`).
 

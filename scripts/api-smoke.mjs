@@ -2,7 +2,8 @@
 //
 // Repite contra el backend los escenarios que el modo `mock` ya cumple, para
 // verificar que backend y base de datos aplican las mismas reglas:
-// registro, inicio de sesión, unicidad, acceso a listas y creación de tareas.
+// registro, inicio de sesión, unicidad, lista por defecto, acceso a listas y
+// creación de tareas (modelo de datos v0.6, PROPUESTA).
 //
 // Uso (PowerShell, desde frontend/), con el backend en marcha:
 //   node scripts/api-smoke.mjs
@@ -72,6 +73,19 @@ try {
     call("POST", "/auth/login", { email: `smoke_${run}@example.com`, password }),
   );
   await check("Con sesión, GET /me responde 200", 200, () => call("GET", "/me"));
+
+  // Modelo v0.6 (P-26): el registro crea la lista personal por defecto «Mis tareas».
+  const lists = await check("GET /lists responde 200", 200, () => call("GET", "/lists"));
+  const defaults = Array.isArray(lists) ? lists.filter((l) => l.is_default) : [];
+  const defaultOk = defaults.length === 1 && defaults[0].list_type === "personal";
+  if (!defaultOk) failures++;
+  console.log(`${defaultOk ? "ok  " : "FAIL"} El usuario nuevo tiene una única lista por defecto, personal`);
+  if (defaults[0]?.id) {
+    await check("Tarea suelta en la lista por defecto", 201, () =>
+      call("POST", `/lists/${defaults[0].id}/tasks`, { title: "Suelta", description: null, due_date: null, assignee_ids: [] }),
+    );
+    await check("La lista por defecto no se puede eliminar", 409, () => call("DELETE", `/lists/${defaults[0].id}`));
+  }
 
   const list = await check("Crear lista compartida", 201, () =>
     call("POST", "/lists", { name: `Smoke ${run}`, description: null, list_type: "shared" }),
