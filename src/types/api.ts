@@ -2,7 +2,7 @@
  * Tipos de los datos que intercambian frontend y backend.
  *
  * Reflejan el contrato de API (PROPUESTA, sin endpoints implementados) y el
- * modelo de datos v0.5 (PROPUESTA). Los nombres van en snake_case porque así
+ * modelo de datos v0.6 (PROPUESTA). Los nombres van en snake_case porque así
  * los devolverá FastAPI. Cuando exista OpenAPI, este archivo debe ajustarse a
  * él (ADR-0009): OpenAPI manda.
  */
@@ -28,6 +28,8 @@ export type TaskList = {
   description: string | null;
   list_type: ListType;
   owner_id: Id;
+  /** Lista personal por defecto «Mis tareas», creada al registrarse (modelo v0.6). */
+  is_default: boolean;
 };
 
 /** Participante de una lista (incluye al propietario). */
