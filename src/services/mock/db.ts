@@ -13,7 +13,18 @@
  * Cuenta de demostración: demo@nexora.app / nexora-demo-1234
  */
 
-import type { Id, LoginInput, RegisterInput, Task, TaskCreateInput, TaskList, User } from "@/types/api";
+import type {
+  Id,
+  ListCreateInput,
+  ListSummary,
+  LoginInput,
+  RegisterInput,
+  Task,
+  TaskCreateInput,
+  TaskList,
+  User,
+} from "@/types/api";
+import { LIMITS } from "@/lib/validation";
 import { ApiError } from "../errors";
 
 type MockUser = User & { password: string };
@@ -27,10 +38,34 @@ type MockState = {
   sessionUserId: Id | null;
 };
 
-// Cambia con el modelo para no leer datos guardados con la forma anterior.
-const STORAGE_KEY = "nexora-mock-db-v0.6";
+// Cambia con el modelo o la semilla para no leer datos guardados con la forma anterior.
+const STORAGE_KEY = "nexora-mock-db-v0.6.1";
 
 const DEFAULT_LIST_NAME = "Mis tareas";
+
+/** Tarea de la semilla; las fechas de creación son fijas para que la semilla sea estable. */
+function seedTask(
+  id: Id,
+  list_id: Id,
+  title: string,
+  status: Task["status"],
+  due_date: string | null,
+  assignee_ids: Id[] = [],
+): Task {
+  const created_at = "2026-11-10T09:00:00.000Z";
+  return {
+    id,
+    list_id,
+    title,
+    description: null,
+    due_date,
+    status,
+    creator_id: 1,
+    assignee_ids,
+    completed_at: status === "done" ? "2026-11-12T18:00:00.000Z" : null,
+    created_at,
+  };
+}
 
 function seed(): MockState {
   return {
@@ -40,7 +75,14 @@ function seed(): MockState {
       { id: 3, username: "Lucía", email: "lucia@nexora.app", password: "lucia-password-1234" },
     ],
     lists: [
-      { id: 1, name: "Proyecto Nexora", description: null, list_type: "shared", owner_id: 1, is_default: false },
+      {
+        id: 1,
+        name: "Proyecto Nexora",
+        description: "Planificación y desarrollo de Nexora.",
+        list_type: "shared",
+        owner_id: 1,
+        is_default: false,
+      },
       { id: 2, name: DEFAULT_LIST_NAME, description: null, list_type: "personal", owner_id: 1, is_default: true },
       { id: 3, name: DEFAULT_LIST_NAME, description: null, list_type: "personal", owner_id: 2, is_default: true },
       { id: 4, name: DEFAULT_LIST_NAME, description: null, list_type: "personal", owner_id: 3, is_default: true },
@@ -50,7 +92,16 @@ function seed(): MockState {
       { id: 1, list_id: 1, invited_user_id: 2, status: "accepted" },
       { id: 2, list_id: 1, invited_user_id: 3, status: "accepted" },
     ],
-    tasks: [],
+    // Tareas de ejemplo (como en WF-003) para que WF-002 muestre recuentos reales.
+    tasks: [
+      seedTask(1, 1, "Definir alcance del MVP", "in_progress", "2026-11-14", [1, 2]),
+      seedTask(2, 1, "Preparar wireframes", "todo", "2026-11-15", [1]),
+      seedTask(3, 1, "Revisar modelo de datos", "todo", "2026-11-12", [2, 3]),
+      seedTask(4, 1, "Documentar endpoints", "in_progress", null, [2]),
+      seedTask(5, 1, "Definir entidades principales", "done", null, [1]),
+      seedTask(6, 2, "Comprar materiales", "todo", "2026-11-15"),
+      seedTask(7, 2, "Preparar presentación del proyecto", "done", "2026-11-14"),
+    ],
     sessionUserId: null,
   };
 }
@@ -168,12 +219,50 @@ export const mockDb = {
     return publicUser(requireSession(load()));
   },
 
-  /** Listas de las que el usuario es propietario o miembro (GET /lists). */
-  async getLists(): Promise<TaskList[]> {
+  /** Listas de las que el usuario es propietario o miembro, con su resumen (GET /lists). */
+  async getLists(): Promise<ListSummary[]> {
     await delay();
     const db = load();
     const user = requireSession(db);
-    return db.lists.filter((list) => memberIds(db, list).includes(user.id));
+    return db.lists
+      .filter((list) => memberIds(db, list).includes(user.id))
+      .map((list) => {
+        const tasks = db.tasks.filter((t) => t.list_id === list.id);
+        return {
+          ...list,
+          task_count: tasks.length,
+          done_count: tasks.filter((t) => t.status === "done").length,
+          member_count: memberIds(db, list).length,
+        };
+      });
+  },
+
+  /** POST /lists. Quien la crea es su propietario; nunca es la lista por defecto. */
+  async createList(input: ListCreateInput): Promise<TaskList> {
+    await delay();
+    const db = load();
+    const user = requireSession(db);
+    const name = input.name.trim();
+    if (!name) throw new ApiError(422, "validation_error", "El nombre de la lista es obligatorio.", ["name"]);
+    if (name.length > LIMITS.listNameMax)
+      throw new ApiError(422, "validation_error", `El nombre no puede superar ${LIMITS.listNameMax} caracteres.`, ["name"]);
+    if (input.list_type !== "personal" && input.list_type !== "shared")
+      throw new ApiError(422, "validation_error", "Elige el tipo de lista.", ["list_type"]);
+    const description = input.description?.trim() || null;
+    if (description && description.length > LIMITS.listDescriptionMax)
+      throw new ApiError(422, "validation_error", `La descripción no puede superar ${LIMITS.listDescriptionMax} caracteres.`, ["description"]);
+
+    const list: TaskList = {
+      id: nextId(db.lists),
+      name,
+      description,
+      list_type: input.list_type,
+      owner_id: user.id,
+      is_default: false,
+    };
+    db.lists.push(list);
+    save();
+    return list;
   },
 
   async getList(listId: Id): Promise<TaskList> {

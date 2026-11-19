@@ -80,6 +80,12 @@ try {
   const defaultOk = defaults.length === 1 && defaults[0].list_type === "personal";
   if (!defaultOk) failures++;
   console.log(`${defaultOk ? "ok  " : "FAIL"} El usuario nuevo tiene una única lista por defecto, personal`);
+  // WF-002 (PROPUESTA de contrato v0.3): cada lista trae su resumen numérico.
+  const summaryOk =
+    Array.isArray(lists) &&
+    lists.every((l) => ["task_count", "done_count", "member_count"].every((k) => Number.isInteger(l[k])));
+  if (!summaryOk) failures++;
+  console.log(`${summaryOk ? "ok  " : "FAIL"} GET /lists incluye task_count, done_count y member_count`);
   if (defaults[0]?.id) {
     await check("Tarea suelta en la lista por defecto", 201, () =>
       call("POST", `/lists/${defaults[0].id}/tasks`, { title: "Suelta", description: null, due_date: null, assignee_ids: [] }),

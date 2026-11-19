@@ -6,7 +6,7 @@
  * (NEX-DOC-005, PROPUESTA) para que el usuario vea el error antes de enviar.
  */
 
-import type { LoginInput, RegisterInput, TaskCreateInput } from "@/types/api";
+import type { ListCreateInput, LoginInput, RegisterInput, TaskCreateInput } from "@/types/api";
 
 /** Errores por campo: nombre del campo → mensaje para el usuario. */
 export type FieldErrors<T> = Partial<Record<keyof T, string>>;
@@ -16,6 +16,8 @@ export const LIMITS = {
   emailMax: 255, // users.email varchar(255)
   passwordMin: 12, // propuesta de NEX-DOC-007 (RN-01, CA-01)
   taskTitleMax: 150, // tasks.title varchar(150)
+  listNameMax: 150, // task_lists.name varchar(150)
+  listDescriptionMax: 500, // task_lists.description varchar(500)
 } as const;
 
 // Comprobación sencilla de forma; la verificación real la hace el backend.
@@ -60,6 +62,20 @@ export function validateTaskCreate(input: TaskCreateInput): FieldErrors<TaskCrea
 
   if (input.due_date && !DATE_PATTERN.test(input.due_date))
     errors.due_date = "Introduce una fecha válida.";
+  return errors;
+}
+
+export function validateListCreate(input: ListCreateInput): FieldErrors<ListCreateInput> {
+  const errors: FieldErrors<ListCreateInput> = {};
+  const name = input.name.trim();
+  if (!name) errors.name = "El nombre de la lista es obligatorio.";
+  else if (name.length > LIMITS.listNameMax)
+    errors.name = `El nombre no puede superar ${LIMITS.listNameMax} caracteres.`;
+
+  if (input.description && input.description.trim().length > LIMITS.listDescriptionMax)
+    errors.description = `La descripción no puede superar ${LIMITS.listDescriptionMax} caracteres.`;
+
+  if (input.list_type !== "personal" && input.list_type !== "shared") errors.list_type = "Elige el tipo de lista.";
   return errors;
 }
 

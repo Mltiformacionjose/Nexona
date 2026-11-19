@@ -32,6 +32,18 @@ export type TaskList = {
   is_default: boolean;
 };
 
+/**
+ * Lista con el resumen que muestra WF-002 Mis listas (GET /lists).
+ * Los recuentos son una PROPUESTA del contrato de API (v0.3): evitan pedir
+ * las tareas de cada lista solo para contarlas.
+ */
+export type ListSummary = TaskList & {
+  task_count: number;
+  done_count: number;
+  /** Propietario más participantes con la invitación aceptada. */
+  member_count: number;
+};
+
 /** Participante de una lista (incluye al propietario). */
 export type ListMember = {
   user_id: Id;
@@ -66,6 +78,13 @@ export type RegisterInput = {
 export type LoginInput = {
   email: string;
   password: string;
+};
+
+/** POST /lists — RF-08, RF-09. La lista nueva nunca es la lista por defecto. */
+export type ListCreateInput = {
+  name: string;
+  description: string | null;
+  list_type: ListType;
 };
 
 /** POST /lists/{list_id}/tasks. El estado inicial lo fija el backend («todo»). */
