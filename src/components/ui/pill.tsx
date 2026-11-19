@@ -1,11 +1,11 @@
 import type { HTMLAttributes } from "react";
 import { cn } from "@/lib/cn";
 
-export type PillTone = "info" | "accent" | "success" | "danger";
+export type PillTone = "info" | "progress" | "success" | "danger";
 
 const dots: Record<PillTone, string> = {
   info: "bg-info",
-  accent: "bg-accent",
+  progress: "bg-progress",
   success: "bg-success",
   danger: "bg-danger",
 };

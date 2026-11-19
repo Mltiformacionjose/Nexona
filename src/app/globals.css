@@ -1,31 +1,38 @@
 @import "tailwindcss";
 
 /*
- * Tokens de diseño de Nexora, tomados del prototipo aprobado (prototype.html).
- * Tema único: oscuro con acento violeta (NEX-DOC-007 §2). No hay tema claro diseñado.
+ * Tokens de diseño de TaskIn, tomados del prototipo (prototype.html, NEX-DOC-007 §2.1, P-27).
+ * Colores de Factoría F5: naranja #ea5729 y crema #fffffb. Tema único: oscuro con acento naranja.
+ * El modo claro está por decidir (P-28).
  */
 :root {
   color-scheme: dark;
 
-  --canvas: #0e1016;
-  --sidebar: #0b0d12;
-  --panel: #171b25;
-  --panel-2: #1b202c;
-  --line: #293142;
-  --chip: #252b38;
+  --canvas: #141110;
+  --sidebar: #0e0c0b;
+  --panel: #1d1918;
+  --panel-2: #26211f;
+  --line: #3a3331;
+  --chip: #2f2927;
 
-  --fg: #edf0f7;
-  --muted: #929bad;
+  --fg: #fffffb;
+  --muted: #aba09c;
 
-  --accent: #9182fa;
-  --accent-soft: #332d55;
-  --accent-tint: #292442;
-  --accent-text: #b9adff;
+  --accent: #ea5729;
+  --accent-soft: #502517;
+  --accent-tint: #361c14;
+  --accent-text: #ff8a5c;
+  --accent-border: #833820;
+  /* Texto sobre el acento. Crema sobre naranja da 3,55:1 (I-28, aceptado). */
+  --on-accent: #fffffb;
+  /* Resplandor del fondo de las pantallas de acceso. */
+  --glow: #2a1710;
 
   --info: #61a8f0;
   --success: #45c692;
-  --warning: #e6aa51;
-  --warning-soft: #302515;
+  --progress: #f4a43a;
+  --warning: #f0c24b;
+  --warning-soft: #332a18;
   --danger: #e46d75;
   --danger-soft: #48252d;
   --danger-text: #ffc1c6;
@@ -46,9 +53,12 @@
   --color-accent-soft: var(--accent-soft);
   --color-accent-tint: var(--accent-tint);
   --color-accent-text: var(--accent-text);
+  --color-accent-border: var(--accent-border);
+  --color-on-accent: var(--on-accent);
 
   --color-info: var(--info);
   --color-success: var(--success);
+  --color-progress: var(--progress);
   --color-warning: var(--warning);
   --color-warning-soft: var(--warning-soft);
   --color-danger: var(--danger);

@@ -8,7 +8,7 @@ function ListIcon() {
   return (
     <span
       aria-hidden="true"
-      className="grid h-10 w-10 shrink-0 place-items-center rounded-[9px] bg-panel-2 text-lg text-accent"
+      className="grid h-10 w-10 shrink-0 place-items-center rounded-[9px] bg-panel-2 text-lg text-accent-text"
     >
       ▤
     </span>
@@ -51,7 +51,7 @@ function Tags({ list }: { list: ListSummary }) {
  */
 export function ListCard({ list }: { list: ListSummary }) {
   return (
-    <article className="relative flex min-h-[210px] flex-col rounded-xl border border-line bg-panel p-5 transition-colors hover:border-[#554b88]">
+    <article className="relative flex min-h-[210px] flex-col rounded-xl border border-line bg-panel p-5 transition-colors hover:border-accent-border">
       <ListIcon />
       <h3 className="mt-4 mb-2.5 text-[15px] font-bold">
         <Link href={`/lists/${list.id}`} className="after:absolute after:inset-0 after:rounded-xl">

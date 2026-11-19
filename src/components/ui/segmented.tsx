@@ -38,7 +38,7 @@ export function Segmented<T extends string>({ label, options, value, onChange, c
             onClick={() => onChange(option.value)}
             className={cn(
               "cursor-pointer rounded-md px-2.5 py-2 text-xs whitespace-nowrap",
-              active ? "bg-accent-soft text-white" : "text-muted hover:text-fg",
+              active ? "bg-accent-soft text-fg" : "text-muted hover:text-fg",
             )}
           >
             {option.glyph && (

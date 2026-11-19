@@ -107,7 +107,7 @@ export function NewTaskScreen({ listId }: { listId: number }) {
             <div className="flex items-center gap-[13px] border-b border-line py-3">
               <span
                 aria-hidden="true"
-                className="grid h-10 w-10 place-items-center rounded-[9px] bg-panel-2 text-lg text-accent"
+                className="grid h-10 w-10 place-items-center rounded-[9px] bg-panel-2 text-lg text-accent-text"
               >
                 ▤
               </span>
