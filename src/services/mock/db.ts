@@ -1,7 +1,7 @@
 /**
  * Base de datos simulada para el modo `mock`.
  *
- * Imita las restricciones del modelo v0.6 (NEX-DOC-005, PROPUESTA) y las
+ * Imita las restricciones del modelo v0.6 (NEX-DOC-005, definitivo) y las
  * respuestas del contrato de API, para que las pantallas se comporten igual
  * que con el backend real. Vive en el navegador (sessionStorage): se pierde al
  * cerrar la pestaña. NO es una base de datos ni sustituye a las pruebas del backend.
@@ -10,7 +10,7 @@
  * son su propietario y las invitaciones aceptadas. Cada cuenta tiene una lista
  * personal por defecto, «Mis tareas».
  *
- * Cuenta de demostración: demo@nexora.app / nexora-demo-1234
+ * Cuenta de demostración: demo@taskin.app / taskin-demo-1234
  */
 
 import type {
@@ -39,7 +39,7 @@ type MockState = {
 };
 
 // Cambia con el modelo o la semilla para no leer datos guardados con la forma anterior.
-const STORAGE_KEY = "nexora-mock-db-v0.6.1";
+const STORAGE_KEY = "taskin-mock-db-v0.6.2";
 
 const DEFAULT_LIST_NAME = "Mis tareas";
 
@@ -70,15 +70,15 @@ function seedTask(
 function seed(): MockState {
   return {
     users: [
-      { id: 1, username: "demo", email: "demo@nexora.app", password: "nexora-demo-1234" },
-      { id: 2, username: "Alex", email: "alex@nexora.app", password: "alex-password-1234" },
-      { id: 3, username: "Lucía", email: "lucia@nexora.app", password: "lucia-password-1234" },
+      { id: 1, username: "demo", email: "demo@taskin.app", password: "taskin-demo-1234" },
+      { id: 2, username: "Alex", email: "alex@taskin.app", password: "alex-password-1234" },
+      { id: 3, username: "Lucía", email: "lucia@taskin.app", password: "lucia-password-1234" },
     ],
     lists: [
       {
         id: 1,
-        name: "Proyecto Nexora",
-        description: "Planificación y desarrollo de Nexora.",
+        name: "Proyecto TaskIn",
+        description: "Planificación y desarrollo de TaskIn.",
         list_type: "shared",
         owner_id: 1,
         is_default: false,
@@ -87,7 +87,7 @@ function seed(): MockState {
       { id: 3, name: DEFAULT_LIST_NAME, description: null, list_type: "personal", owner_id: 2, is_default: true },
       { id: 4, name: DEFAULT_LIST_NAME, description: null, list_type: "personal", owner_id: 3, is_default: true },
     ],
-    // Alex y Lucía aceptaron la invitación a «Proyecto Nexora»: son miembros.
+    // Alex y Lucía aceptaron la invitación a «Proyecto TaskIn»: son miembros.
     invitations: [
       { id: 1, list_id: 1, invited_user_id: 2, status: "accepted" },
       { id: 2, list_id: 1, invited_user_id: 3, status: "accepted" },

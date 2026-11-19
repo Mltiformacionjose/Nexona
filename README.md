@@ -1,15 +1,15 @@
-# Nexora — Frontend
+# TaskIn — Frontend
 
-Nexora es una aplicación web de gestión de tareas y listas personales y compartidas: permite crear y organizar tareas, compartir listas con otras personas, recibir avisos y ver un resumen del trabajo. Este repositorio contiene el **frontend**, la interfaz de usuario. El backend vive en otro repositorio.
+TaskIn es una aplicación web de gestión de tareas y listas personales y compartidas: permite crear y organizar tareas, compartir listas con otras personas, recibir avisos y ver un resumen del trabajo. Este repositorio contiene el **frontend**, la interfaz de usuario. El backend vive en otro repositorio.
 
-> **Estado real (2026-11-19):** desarrollo en marcha, pieza a pieza y con un commit por pieza. Hecho: fundación visual del diseño aprobado, componentes base, capa de servicios hacia la API y las pantallas **inicio de sesión (WF-007), registro (WF-008), recuperar contraseña (WF-009), mis listas (WF-002) y nueva tarea (WF-004)**, dentro del marco con barra lateral. `/lists/[listId]` es una página provisional hasta WF-003. Como el backend aún no tiene endpoints, funcionan en **modo simulado**: los datos viven en el navegador y no se guarda nada en una base de datos. La página `/` sigue siendo un muestrario temporal.
+> **Estado real (2026-11-19):** el proyecto se llama TaskIn (antes Nexora) y usa la paleta naranja de Factoría F5 (tema oscuro; el modo claro está por decidir). Desarrollo en marcha, pieza a pieza y con un commit por pieza. Hecho: fundación visual del diseño aprobado, componentes base, capa de servicios hacia la API y las pantallas **inicio de sesión (WF-007), registro (WF-008), recuperar contraseña (WF-009), mis listas (WF-002) y nueva tarea (WF-004)**, dentro del marco con barra lateral. `/lists/[listId]` es una página provisional hasta WF-003. Como el backend aún no tiene endpoints, funcionan en **modo simulado**: los datos viven en el navegador y no se guarda nada en una base de datos. La página `/` sigue siendo un muestrario temporal.
 
 ## Probar las pantallas (modo simulado)
 
 1. `npm run dev` y abre `http://localhost:3000/register` o `/login`.
-2. Cuenta de demostración: **demo@nexora.app** / **nexora-demo-1234**.
+2. Cuenta de demostración: **demo@taskin.app** / **taskin-demo-1234**.
 3. Mis listas: `/lists`. Busca, filtra por tipo, cambia entre cuadrícula y lista, y crea listas con «Nueva lista».
-4. Nueva tarea: `/lists/1/tasks/new` (lista compartida «Proyecto Nexora», con responsables) o `/lists/2/tasks/new` («Mis tareas» de la cuenta demo, sin responsables).
+4. Nueva tarea: `/lists/1/tasks/new` (lista compartida «Proyecto TaskIn», con responsables) o `/lists/2/tasks/new` («Mis tareas» de la cuenta demo, sin responsables).
 5. Cada cuenta nueva recibe su propia lista «Mis tareas», como propone el modelo de datos v0.6, y la ve en `/lists`. Las listas de otras personas responden «lista no accesible», como haría el backend.
 
 Los datos simulados se borran al cerrar la pestaña. Cuando el backend tenga endpoints, pon `NEXT_PUBLIC_API_MODE=http` en `.env.local`. Las pantallas no cambian y `npm run smoke:api` comprueba la API real (TESTING_FRONTEND, `Nexora-Documentation/10-frontend/TESTING_FRONTEND.md`).
@@ -27,7 +27,7 @@ Next.js 16.4.6 (App Router), React 19.3.0, TypeScript 5 (estricto), Tailwind CSS
 ## Requisitos previos
 
 - Node.js con npm (el proyecto se ha usado con Node 24; la versión mínima no está documentada).
-- Opcional para trabajar con datos reales: el backend de Nexora en ejecución (aún no hay endpoints).
+- Opcional para trabajar con datos reales: el backend de TaskIn en ejecución (aún no hay endpoints).
 
 ## Instalación (PowerShell, desde esta carpeta)
 
@@ -62,7 +62,7 @@ npm run start       # sirve la compilación
 npm run smoke:api   # escenarios contra la API real (requiere backend)
 ```
 
-A 2026-11-17 pasan lint, tipos y build. No hay pruebas automáticas de interfaz todavía (TESTING_FRONTEND, `Nexora-Documentation/10-frontend/TESTING_FRONTEND.md`).
+A 2026-11-19 pasan lint, tipos y build. No hay pruebas automáticas de interfaz todavía (TESTING_FRONTEND, `Nexora-Documentation/10-frontend/TESTING_FRONTEND.md`).
 
 ## Estructura del proyecto
 

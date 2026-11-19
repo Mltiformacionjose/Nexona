@@ -1,4 +1,4 @@
-// Comprobación de humo contra la API REAL de Nexora.
+// Comprobación de humo contra la API REAL de TaskIn.
 //
 // Repite contra el backend los escenarios que el modo `mock` ya cumple, para
 // verificar que backend y base de datos aplican las mismas reglas:
