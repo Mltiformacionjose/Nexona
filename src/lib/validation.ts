@@ -3,7 +3,7 @@
  *
  * Solo son ayuda de usabilidad: la validación que cuenta es la del backend y
  * las restricciones de la base de datos. Los límites copian el modelo v0.6
- * (NEX-DOC-005, PROPUESTA) para que el usuario vea el error antes de enviar.
+ * (NEX-DOC-005, definitivo) para que el usuario vea el error antes de enviar.
  */
 
 import type { ListCreateInput, LoginInput, RegisterInput, TaskCreateInput } from "@/types/api";
