@@ -8,7 +8,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Nexora",
+  title: "TaskIn",
   description: "Gestiona tus tareas y listas personales y compartidas.",
 };
 

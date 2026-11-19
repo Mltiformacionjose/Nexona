@@ -3,7 +3,7 @@ import Link from "next/link";
 import { AuthCard } from "@/features/auth/auth-card";
 import { ForgotPasswordForm } from "@/features/auth/forgot-password-form";
 
-export const metadata: Metadata = { title: "Recuperar contraseña · Nexora" };
+export const metadata: Metadata = { title: "Recuperar contraseña · TaskIn" };
 
 /** WF-009 Recuperar contraseña (solicitud). */
 export default function ForgotPasswordPage() {

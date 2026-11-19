@@ -12,7 +12,7 @@ export default function Home() {
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-8 px-6 py-12">
       <header>
-        <p className="text-2xl font-extrabold tracking-wide">NEXORA</p>
+        <p className="text-2xl font-extrabold tracking-wide">TASKIN</p>
         <p className="mt-1 text-sm text-muted">Muestrario de componentes (temporal).</p>
       </header>
 
@@ -41,7 +41,7 @@ export default function Home() {
           <Badge>Compartida</Badge>
           <Badge tone="warning">Pendiente</Badge>
           <Pill tone="info">Por hacer</Pill>
-          <Pill tone="accent">En progreso</Pill>
+          <Pill tone="progress">En progreso</Pill>
           <Pill tone="success">Hecha</Pill>
           <Pill tone="danger">Vencida</Pill>
           <Pill>Participante</Pill>

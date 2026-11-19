@@ -30,10 +30,10 @@ function NavLink({ item, pathname }: { item: NavItem; pathname: string }) {
       aria-current={active ? "page" : undefined}
       className={cn(
         "flex items-center gap-1.5 rounded-[9px] px-2 py-2 text-sm whitespace-nowrap md:my-[3px] md:gap-[13px] md:px-[13px] md:py-[13px]",
-        active ? "bg-accent-tint text-white" : "text-muted hover:bg-accent-tint hover:text-white",
+        active ? "bg-accent-tint text-fg" : "text-muted hover:bg-accent-tint hover:text-fg",
       )}
     >
-      <span aria-hidden="true" className={cn("w-[18px] text-center", active ? "text-accent" : "text-muted")}>
+      <span aria-hidden="true" className={cn("w-[18px] text-center", active ? "text-accent-text" : "text-muted")}>
         {item.glyph}
       </span>
       {item.label}
@@ -55,7 +55,7 @@ export function Sidebar() {
 
   return (
     <aside className="flex shrink-0 items-center gap-1 overflow-x-auto border-b border-line bg-sidebar px-3 py-2.5 md:min-h-screen md:w-[248px] md:flex-col md:items-stretch md:gap-0 md:overflow-visible md:border-b-0 md:px-4 md:pt-[27px] md:pb-[18px]">
-      <p className="mr-2 text-[15px] font-extrabold tracking-[0.04em] md:mx-3 md:text-[22px]">NEXORA</p>
+      <p className="mr-2 text-[15px] font-extrabold tracking-[0.04em] md:mx-3 md:text-[22px]">TASKIN</p>
       <p className="mx-3 mt-1.5 mb-8 hidden text-xs tracking-[0.08em] text-muted md:block">ORGANIZACIÓN PERSONAL</p>
       <p className="mx-3 mb-3.5 hidden text-xs font-bold tracking-[0.08em] text-muted md:block">MENÚ PRINCIPAL</p>
 

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { AuthCard } from "@/features/auth/auth-card";
 import { RegisterForm } from "@/features/auth/register-form";
 
-export const metadata: Metadata = { title: "Crear cuenta · Nexora" };
+export const metadata: Metadata = { title: "Crear cuenta · TaskIn" };
 
 /** WF-008 Registro. */
 export default function RegisterPage() {
@@ -20,7 +20,7 @@ export default function RegisterPage() {
           </Link>
         </>
       }
-      note="Al registrarte aceptas los términos de uso de Nexora."
+      note="Al registrarte aceptas los términos de uso de TaskIn."
     >
       <RegisterForm />
     </AuthCard>

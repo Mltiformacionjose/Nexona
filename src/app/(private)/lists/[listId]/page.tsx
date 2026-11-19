@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { ListDetailPlaceholder } from "@/features/lists/list-detail-placeholder";
 
-export const metadata: Metadata = { title: "Lista · Nexora" };
+export const metadata: Metadata = { title: "Lista · TaskIn" };
 
 /** TEMPORAL hasta WF-003 Detalle de lista. */
 export default function ListPage({ params }: PageProps<"/lists/[listId]">) {

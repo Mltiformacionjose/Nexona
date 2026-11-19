@@ -9,7 +9,7 @@ export default function PrivateLayout({ children }: LayoutProps<"/">) {
         <Sidebar />
         <main className="min-w-0 flex-1 px-4 py-6 md:px-10 md:pt-10 md:pb-[26px]">
           {children}
-          <p className="mt-7 text-xs text-muted">Nexora · El uso de la aplicación está sujeto a sus términos de uso.</p>
+          <p className="mt-7 text-xs text-muted">TaskIn · El uso de la aplicación está sujeto a sus términos de uso.</p>
         </main>
       </div>
     </SessionProvider>

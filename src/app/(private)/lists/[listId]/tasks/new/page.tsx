@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { NewTaskScreen } from "@/features/tasks/new-task-screen";
 
-export const metadata: Metadata = { title: "Nueva tarea · Nexora" };
+export const metadata: Metadata = { title: "Nueva tarea · TaskIn" };
 
 /** WF-004 Crear tarea. */
 export default function NewTaskPage({ params }: PageProps<"/lists/[listId]/tasks/new">) {

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { AuthCard } from "@/features/auth/auth-card";
 import { LoginForm } from "@/features/auth/login-form";
 
-export const metadata: Metadata = { title: "Iniciar sesión · Nexora" };
+export const metadata: Metadata = { title: "Iniciar sesión · TaskIn" };
 
 /** WF-007 Acceso. */
 export default function LoginPage() {
@@ -20,7 +20,7 @@ export default function LoginPage() {
           </Link>
         </>
       }
-      note="Al continuar aceptas los términos de uso de Nexora."
+      note="Al continuar aceptas los términos de uso de TaskIn."
     >
       <LoginForm />
     </AuthCard>
